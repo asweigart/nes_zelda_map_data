@@ -142,7 +142,7 @@ mainClock = pygame.time.Clock()
 ROOM_WIDTH = 256 # size of a single "room" in pixels
 ROOM_HEIGHT = 168
 
-WINDOW_MAGNIFICATION = 3 # each pixel will be enlarged by this many times before being drawn on the screen (must be an int)
+WINDOW_MAGNIFICATION = 2 # each pixel will be enlarged by this many times before being drawn on the screen (must be an int)
 
 LEFT, RIGHT, UP, DOWN = 'left right up down'.split() # constants
 WALKRATE = 3 # how many pixels to move while walking per frame
