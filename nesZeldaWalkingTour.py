@@ -337,26 +337,46 @@ def main():
             elif event.type == KEYDOWN:
                 if event.key == K_UP:
                     upKeyPressed = True
+                    downKeyPressed = False
                     DIRECTION = UP
                 elif event.key == K_DOWN:
                     downKeyPressed = True
+                    upKeyPressed = False
                     DIRECTION = DOWN
                 elif event.key == K_LEFT:
                     leftKeyPressed = True
+                    rightKeyPressed = False
                     DIRECTION = LEFT
                 elif event.key == K_RIGHT:
                     rightKeyPressed = True
+                    leftKeyPressed = False
                     DIRECTION = RIGHT
 
             elif event.type == KEYUP:
                 if event.key == K_UP:
                     upKeyPressed = False
+                    if rightKeyPressed:
+                        DIRECTION = RIGHT
+                    elif leftKeyPressed:
+                        DIRECTION = LEFT
                 elif event.key == K_DOWN:
                     downKeyPressed = False
+                    if rightKeyPressed:
+                        DIRECTION = RIGHT
+                    elif leftKeyPressed:
+                        DIRECTION = LEFT
                 elif event.key == K_LEFT:
                     leftKeyPressed = False
+                    if upKeyPressed:
+                        DIRECTION = UP
+                    elif downKeyPressed:
+                        DIRECTION = DOWN
                 elif event.key == K_RIGHT:
                     rightKeyPressed = False
+                    if upKeyPressed:
+                        DIRECTION = UP
+                    elif downKeyPressed:
+                        DIRECTION = DOWN
 
         if upKeyPressed or downKeyPressed or leftKeyPressed or rightKeyPressed:
             # let PygAnim draw the correct walking sprite from the animation object
