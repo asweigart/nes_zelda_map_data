@@ -20,7 +20,6 @@ This script should work in both Python 2 and Python 3.
 Feel free to email me with any questions about this file: al@inventwithpython.com
 
 NOTE: Currently this program doesn't handle blocking, so you can walk through walls.
-Also if you walk off the world map it will crash.
 """
 
 
@@ -132,6 +131,8 @@ WORLD_MAP_DATA = """
 3d 3d 3d 3d 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 3d 3d 3d 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 43 43 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 43 43 43 43 2f 2f 30 6b 6b 2e 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 43 43 43 43 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 2f 43 43 43 43 1b 1b 1b 1b 1b 1b 1b 1b 1b 1b 1b 1b 1b 1b 28 29 29 29 3d 3d 2a 28 29 29 29 29 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 2a 28 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 64 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65
 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 6b 6b 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 1b 1b 1b 1b 1b 1b 1b 1b 1b 1b 1b 1b 1b 1b 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 64 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65""".strip()
 
+WORLD_MAP_WIDTH = 4096 # entire map width in pixels (manually calculated, you'll have to update this if you change the map size above)
+WORLD_MAP_HEIGHT = 1344 # entire map height in pixels (manually calculated)
 
 
 pygame.init()
@@ -142,7 +143,7 @@ mainClock = pygame.time.Clock()
 ROOM_WIDTH = 256 # size of a single "room" in pixels
 ROOM_HEIGHT = 168
 
-WINDOW_MAGNIFICATION = 2 # each pixel will be enlarged by this many times before being drawn on the screen (must be an int)
+WINDOW_MAGNIFICATION = 3 # each pixel will be enlarged by this many times before being drawn on the screen (must be an int)
 
 LEFT, RIGHT, UP, DOWN = 'left right up down'.split() # constants
 WALKRATE = 3 # how many pixels to move while walking per frame
@@ -156,6 +157,7 @@ pygame.display.set_caption('NES Zelda Walking Tour')
 CAMERA_LEFT, CAMERA_TOP = ROOM_WIDTH * 7, ROOM_HEIGHT * 7 # Where on the map the left, top of the camera is. Starts at the (7, 7) room.
 LINK_LEFT, LINK_TOP = CAMERA_LEFT + (7*16 + 8), CAMERA_TOP + (5*16) # link's current (left, top) position in map pixels
 LINK_WIDTH, LINK_HEIGHT = 16, 16 # constants
+
 
 # Set up Link walking animation:
 # load each image for the animation frames
@@ -369,6 +371,15 @@ def main():
                 LINK_LEFT -= WALKRATE
             if DIRECTION == RIGHT:
                 LINK_LEFT += WALKRATE
+
+            if LINK_TOP < 0:
+                LINK_TOP = 0
+            if LINK_TOP + LINK_HEIGHT > WORLD_MAP_HEIGHT:
+                LINK_TOP = WORLD_MAP_HEIGHT - LINK_HEIGHT
+            if LINK_LEFT < 0:
+                LINK_LEFT = 0
+            if LINK_LEFT + LINK_WIDTH > WORLD_MAP_WIDTH:
+                LINK_LEFT = WORLD_MAP_WIDTH - LINK_WIDTH
 
         else:
             # Link is not moving, so pause the walking animation
