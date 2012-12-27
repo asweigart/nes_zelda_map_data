@@ -28,8 +28,8 @@ from pygame.locals import *
 
 """
 world is 16 x 8 rooms, 256 x 88 tiles (including half tiles), 4096 x 1344 pixels
-rooms are 16 x 10.5 tiles, 256 x 168 pixels
-tiles are 16 x 16 pixels (except bottom row which is 16 x 8)
+rooms are 16 x 11 tiles, 256 x 176 pixels
+tiles are 16 x 16 pixels
 
 World map colors:
 ['(32, 56, 236, 255)',      # blue
@@ -141,7 +141,7 @@ pygame.init()
 mainClock = pygame.time.Clock()
 
 ROOM_WIDTH = 256 # size of a single "room" in pixels
-ROOM_HEIGHT = 168
+ROOM_HEIGHT = 176
 
 WINDOW_MAGNIFICATION = 3 # each pixel will be enlarged by this many times before being drawn on the screen (must be an int)
 
@@ -149,7 +149,7 @@ LEFT, RIGHT, UP, DOWN = 'left right up down'.split() # constants
 WALKRATE = 3 # how many pixels to move while walking per frame
 ANIMRATE = 0.15 # how many seconds each frame of link's walking animation lasts
 
-WINDOW_WIDTH, WINDOW_HEIGHT = ROOM_WIDTH * WINDOW_MAGNIFICATION, ROOM_HEIGHT * WINDOW_MAGNIFICATION
+WINDOW_WIDTH, WINDOW_HEIGHT = ROOM_WIDTH * WINDOW_MAGNIFICATION, (ROOM_HEIGHT - 8) * WINDOW_MAGNIFICATION # subtract 8 because we don't show the bottom half of the bottom row
 
 DISPLAYSURF = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('NES Zelda Walking Tour')
@@ -252,9 +252,9 @@ def loadMapData():
 
 
 def getRoomSurface(leftPixel, topPixel, mapData, tileData):
-    # returns a single 256 x 168 pixel Surface of 16 x 10.5 tiles (since this is a standard zelda room size)
+    # returns a single 256 x 176 pixel Surface of 16 x 11 tiles (since this is a standard zelda room size)
     leftmostTile = leftPixel // 16
-    topmostTile = ((topPixel // 168) * 11) + ((topPixel % 168) // 16)
+    topmostTile = topPixel // 16
     roomSurf = pygame.Surface((ROOM_WIDTH, ROOM_HEIGHT))
 
     for tiley in range(topmostTile, topmostTile + 11):
@@ -270,10 +270,10 @@ def slideRoomAnimation(slideDirection, mapData, tileData):
     # (and adjust link's position a little bit towards the new room)
     if slideDirection == UP:
         nextRoomLeft, nextRoomTop = CAMERA_LEFT, CAMERA_TOP + (ROOM_HEIGHT)
-        LINK_TOP += LINK_HEIGHT // 2
+        LINK_TOP += LINK_HEIGHT
     if slideDirection == DOWN:
         nextRoomLeft, nextRoomTop = CAMERA_LEFT, CAMERA_TOP - (ROOM_HEIGHT)
-        LINK_TOP -= LINK_HEIGHT // 2
+        LINK_TOP -= LINK_HEIGHT
     if slideDirection == LEFT:
         nextRoomLeft, nextRoomTop = CAMERA_LEFT + (ROOM_WIDTH), CAMERA_TOP
         LINK_LEFT += LINK_WIDTH // 2
