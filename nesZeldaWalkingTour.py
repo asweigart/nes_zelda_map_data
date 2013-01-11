@@ -27,8 +27,8 @@ import pygame, sys, os, pprint, time, pyganim
 from pygame.locals import *
 
 """
-world is 16 x 8 rooms, 256 x 88 tiles (including half tiles), 4096 x 1344 pixels
-rooms are 16 x 11 tiles, 256 x 176 pixels
+world is 16 x 8 rooms, 256 x 88 tiles, 4096 x 1408 pixels
+rooms are 16 x 11 tiles, 256 x 176 pixels (but only the top half of the bottom row of tiles is shown on screen)
 tiles are 16 x 16 pixels
 
 World map colors:
@@ -132,7 +132,7 @@ WORLD_MAP_DATA = """
 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 6b 6b 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 1b 1b 1b 1b 1b 1b 1b 1b 1b 1b 1b 1b 1b 1b 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 64 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65""".strip()
 
 WORLD_MAP_WIDTH = 4096 # entire map width in pixels (manually calculated, you'll have to update this if you change the map size above)
-WORLD_MAP_HEIGHT = 1344 # entire map height in pixels (manually calculated)
+WORLD_MAP_HEIGHT = 1408 # entire map height in pixels (manually calculated)
 
 
 pygame.init()
@@ -141,7 +141,7 @@ pygame.init()
 mainClock = pygame.time.Clock()
 
 ROOM_WIDTH = 256 # size of a single "room" in pixels
-ROOM_HEIGHT = 176
+ROOM_HEIGHT = 176 # this is the full room height, but only the top half of the bottom row of tiles is shown on screen.
 
 WINDOW_MAGNIFICATION = 3 # each pixel will be enlarged by this many times before being drawn on the screen (must be an int)
 
